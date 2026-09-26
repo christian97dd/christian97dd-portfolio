@@ -1,0 +1,39 @@
+---
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import { languages, getLang, useTranslations, type Lang } from '../i18n/utils';
+import '../styles/global.css';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const alternates = (Object.keys(languages) as Lang[]).map((code) => ({
+  code,
+  href: getAbsoluteLocaleUrl(code, ''),
+}));
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{t.meta.title}</title>
+    <meta name="description" content={t.meta.description} />
+    <meta name="theme-color" content="#0f0e12" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={getAbsoluteLocaleUrl(lang, '')} />
+    {alternates.map(({ code, href }) => <link rel="alternate" hreflang={code} href={href} />)}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.a11y.skipToContent}</a>
+    <slot />
+    <script>
+      import { initScenes } from '../scripts/scenes';
+      initScenes();
+    </script>
+  </body>
+</html>
