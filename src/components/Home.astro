@@ -1,0 +1,18 @@
+---
+import Footer from './Footer.astro';
+import Games from './Games.astro';
+import Hero from './Hero.astro';
+import Work from './Work.astro';
+import Workshop from './Workshop.astro';
+import Base from '../layouts/Base.astro';
+---
+
+<Base>
+  <Hero />
+  <main id="main" class="wrap" tabindex="-1">
+    <Work />
+    <Games />
+    <Workshop />
+  </main>
+  <Footer />
+</Base>

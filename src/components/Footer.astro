@@ -1,0 +1,53 @@
+---
+import ExternalLink from './ExternalLink.astro';
+import { links } from '../data/links';
+import { useTranslations } from '../i18n/utils';
+
+const t = useTranslations(Astro.currentLocale);
+---
+
+<footer class="wrap">
+  <p>{t.footer.signature}</p>
+  <nav aria-label={t.a11y.footerNav}>
+    <ul>
+      <li><ExternalLink href={links.github}>{t.links.github}</ExternalLink></li>
+      <li><ExternalLink href={links.linkedin}>{t.links.linkedin}</ExternalLink></li>
+      <li><ExternalLink href={links.itch}>{t.links.itch}</ExternalLink></li>
+    </ul>
+  </nav>
+</footer>
+
+<style>
+  footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 96px;
+    padding-block: 32px 48px;
+    border-top: 1px solid var(--line);
+    font: 400 13px/1.5 var(--mono);
+    color: var(--muted);
+  }
+
+  p {
+    margin: 0;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  ul :global(a) {
+    text-decoration: none;
+  }
+
+  ul :global(a:hover) {
+    color: var(--ember);
+  }
+</style>
