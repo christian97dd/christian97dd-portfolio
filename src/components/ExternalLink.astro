@@ -1,0 +1,14 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { useTranslations } from '../i18n/utils';
+
+type Props = Omit<HTMLAttributes<'a'>, 'target' | 'rel'> & { href: string };
+
+const props = Astro.props;
+const t = useTranslations(Astro.currentLocale);
+---
+
+<a {...props} target="_blank" rel="noopener noreferrer">
+  <slot />
+  <span class="sr-only"> {t.a11y.newTab}</span>
+</a>

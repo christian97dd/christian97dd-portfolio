@@ -1,0 +1,64 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { languages, getLang, useTranslations, type Lang } from '../i18n/utils';
+
+const current = getLang(Astro.currentLocale);
+const t = useTranslations(current);
+const options = (Object.keys(languages) as Lang[]).map((code) => ({
+  code,
+  name: languages[code],
+  href: getRelativeLocaleUrl(code, ''),
+  active: code === current,
+}));
+---
+
+<nav class="lang-toggle" aria-label={t.a11y.languageNav}>
+  <ul>
+    {
+      options.map(({ code, name, href, active }) => (
+        <li>
+          <a
+            href={href}
+            hreflang={code}
+            lang={code}
+            aria-current={active ? 'page' : undefined}
+          >
+            <span aria-hidden="true">{code.toUpperCase()}</span>
+            <span class="sr-only">{name}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--line);
+  }
+
+  a {
+    display: block;
+    min-width: 44px;
+    padding: 10px 12px;
+    font: 500 13px/1 var(--mono);
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s, background-color 0.2s;
+  }
+
+  a:hover {
+    color: var(--bone);
+  }
+
+  a[aria-current='page'] {
+    background: var(--ember);
+    color: var(--ground);
+  }
+</style>
