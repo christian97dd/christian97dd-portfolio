@@ -1,0 +1,19 @@
+---
+interface Props {
+  headingId: string;
+  hour: string;
+  hourLabel: string;
+  title: string;
+  intro: string;
+}
+
+const { headingId, hour, hourLabel, title, intro } = Astro.props;
+---
+
+<div class="block-head">
+  <p class="hour"><b>{hour}</b> · {hourLabel}</p>
+  <div>
+    <h2 id={headingId}>{title}</h2>
+    <p>{intro}</p>
+  </div>
+</div>

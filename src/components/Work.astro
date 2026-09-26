@@ -1,0 +1,192 @@
+---
+import BlockHead from './BlockHead.astro';
+import ExternalLink from './ExternalLink.astro';
+import { links } from '../data/links';
+import { stack, stackGroups } from '../data/stack';
+import { useTranslations } from '../i18n/utils';
+
+const t = useTranslations(Astro.currentLocale);
+const w = t.work;
+---
+
+<section class="block" id="codigo" aria-labelledby="codigo-title">
+  <BlockHead
+    headingId="codigo-title"
+    hour={w.hour}
+    hourLabel={w.hourLabel}
+    title={w.title}
+    intro={w.intro}
+  />
+
+  <div class="grid">
+    <div class="cell">
+      <h3>{w.apps.title}</h3>
+      <p>{w.apps.body}</p>
+    </div>
+
+    <div class="cell">
+      <h3>{w.tools.title}</h3>
+      <ul class="tools">
+        <li>
+          <h4>campus-sync</h4>
+          <p>{w.tools.campusSync}</p>
+          <p class="tech">Node.js + Playwright</p>
+        </li>
+        <li>
+          <h4>jira-quick-open</h4>
+          <p>{w.tools.jiraQuickOpen}</p>
+          <ExternalLink class="store" href={links.jiraQuickOpen}>
+            <span aria-hidden="true">{w.tools.storeLink} ↗</span>
+            <span class="sr-only">{w.tools.storeLinkLabel}</span>
+          </ExternalLink>
+        </li>
+      </ul>
+    </div>
+
+    <div class="cell full">
+      <h3>{w.stackTitle}</h3>
+      <div class="groups">
+        {
+          stackGroups.map((group) => (
+            <div class="group">
+              <h4 id={`stack-${group}`}>{w.stackGroups[group]}</h4>
+              <ul class="chips" aria-labelledby={`stack-${group}`}>
+                {stack
+                  .filter((tech) => tech.group === group)
+                  .map((tech) => (
+                    <li class="chip">
+                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d={tech.icon} />
+                      </svg>
+                      {tech.name}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .cell {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    padding: 28px;
+    background: var(--ground);
+  }
+
+  h3 {
+    margin: 0;
+    font: 400 28px/1.15 var(--display);
+  }
+
+  p {
+    margin: 0;
+    max-width: 52ch;
+    color: var(--muted);
+  }
+
+  .tools {
+    display: grid;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tools li {
+    display: grid;
+    gap: 4px;
+  }
+
+  h4 {
+    margin: 0;
+    font: 500 14px/1.3 var(--mono);
+    color: var(--bone);
+  }
+
+  .tools p {
+    font-size: 15px;
+  }
+
+  .tech {
+    font: 400 12px/1.4 var(--mono);
+    color: var(--bone);
+    opacity: 0.8;
+  }
+
+  .tools :global(.store) {
+    justify-self: start;
+    padding-block: 4px;
+    font: 500 12px/1.4 var(--mono);
+    color: var(--ember);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ember-deep);
+  }
+
+  .tools :global(.store:hover) {
+    border-color: var(--ember);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    font: 400 13px/1 var(--mono);
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .chip svg {
+    width: 15px;
+    height: 15px;
+    flex: none;
+    fill: currentColor;
+    opacity: 0.85;
+  }
+
+  .groups {
+    display: grid;
+    gap: 18px;
+  }
+
+  .group {
+    display: grid;
+    gap: 10px;
+  }
+
+  .group h4 {
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  @media (min-width: 640px) {
+    .group {
+      grid-template-columns: 140px minmax(0, 1fr);
+      align-items: center;
+      gap: 20px;
+    }
+  }
+
+  @media (min-width: 760px) {
+    .grid {
+      grid-template-columns: 1.3fr 1fr;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
