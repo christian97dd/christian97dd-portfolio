@@ -1,0 +1,43 @@
+---
+import BlockHead from './BlockHead.astro';
+import GameCard from './GameCard.astro';
+import { games } from '../data/games';
+import { useTranslations } from '../i18n/utils';
+
+const t = useTranslations(Astro.currentLocale);
+const g = t.games;
+---
+
+<section class="block" id="juegos" aria-labelledby="juegos-title">
+  <BlockHead
+    headingId="juegos-title"
+    hour={g.hour}
+    hourLabel={g.hourLabel}
+    title={g.title}
+    intro={g.intro}
+  />
+  <ul class="games">
+    {
+      games.map((game) => (
+        <li>
+          <GameCard game={game} />
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .games {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .games > li {
+    display: grid;
+  }
+</style>

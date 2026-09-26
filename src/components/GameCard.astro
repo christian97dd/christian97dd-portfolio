@@ -1,0 +1,139 @@
+---
+import ExternalLink from './ExternalLink.astro';
+import type { Game } from '../data/games';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  game: Game;
+}
+
+const { game } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
+const copy = t.games.items[game.id];
+const titleId = `game-${game.id}`;
+---
+
+<article class="game" aria-labelledby={titleId}>
+  <canvas data-scene={game.scene} aria-hidden="true"></canvas>
+  <div class="body">
+    <div class="top">
+      <h3 id={titleId}>
+        {
+          game.url ? (
+            <ExternalLink href={game.url}>
+              {copy.title}
+              <span class="sr-only">, {t.a11y.playOn}</span>
+            </ExternalLink>
+          ) : (
+            copy.title
+          )
+        }
+      </h3>
+      <p class:list={['status', game.status]}>{t.games.status[game.status]}</p>
+    </div>
+    <p class="description">{copy.description}</p>
+    <ul class="specs" aria-label={t.games.specsLabel}>
+      {copy.specs.map((spec) => <li>{spec}</li>)}
+    </ul>
+  </div>
+</article>
+
+<style>
+  .game {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .game:has(:global(a:hover)),
+  .game:has(:global(a:focus-visible)) {
+    border-color: var(--ember-deep);
+    transform: translateY(-2px);
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #0a090c;
+  }
+
+  .body {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    padding: 18px 20px 22px;
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  h3 {
+    margin: 0;
+    font: 400 26px/1.1 var(--display);
+  }
+
+  h3 :global(a) {
+    text-decoration: none;
+  }
+
+  /* The title link covers the whole card so the card is clickable,
+     while screen readers still hear one link named after the game. */
+  h3 :global(a)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  h3 :global(a:focus-visible) {
+    outline: none;
+  }
+
+  .game:has(:global(a:focus-visible)) {
+    outline: 2px solid var(--ember);
+    outline-offset: 3px;
+  }
+
+  .status {
+    flex: none;
+    margin: 0;
+    padding: 5px 7px;
+    font: 500 11px/1 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid currentColor;
+  }
+
+  .status.live {
+    color: var(--ember);
+  }
+
+  .status.wip {
+    color: var(--moon);
+  }
+
+  .description {
+    margin: 0;
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  .specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+    font: 400 12px/1.4 var(--mono);
+    color: var(--bone);
+    opacity: 0.8;
+  }
+</style>
