@@ -1,0 +1,73 @@
+---
+import BlockHead from './BlockHead.astro';
+import { useTranslations } from '../i18n/utils';
+
+const t = useTranslations(Astro.currentLocale);
+const w = t.workshop;
+---
+
+<section class="block" id="taller" aria-labelledby="taller-title">
+  <BlockHead
+    headingId="taller-title"
+    hour={w.hour}
+    hourLabel={w.hourLabel}
+    title={w.title}
+    intro={w.intro}
+  />
+  <div class="workshop">
+    <canvas data-printer data-caption={w.printerCaption} aria-hidden="true"></canvas>
+    <div>
+      <h3>{w.subtitle}</h3>
+      <p>{w.body}</p>
+      <ul class="products" aria-label={w.productsLabel}>
+        {w.products.map((product) => <li>{product}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .workshop {
+    display: grid;
+    gap: 32px;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  h3 {
+    margin: 0 0 12px;
+    font: 400 36px/1.1 var(--display);
+  }
+
+  p {
+    margin: 0 0 16px;
+    max-width: 52ch;
+    color: var(--muted);
+  }
+
+  .products {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font: 400 13px/1.8 var(--mono);
+    color: var(--bone);
+  }
+
+  .products li::before {
+    content: '▸ ';
+    color: var(--ember);
+  }
+
+  @media (min-width: 760px) {
+    .workshop {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+    }
+  }
+</style>
